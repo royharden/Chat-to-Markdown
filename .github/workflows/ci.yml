@@ -1,0 +1,76 @@
+# =============================================================================
+# CI — deterministic anti-rot gauntlet + non-blocking rot metrics.
+# -----------------------------------------------------------------------------
+# Runs on push and pull_request to ANY branch. In the current no-product-code
+# state every gauntlet step SKIPs and the `gauntlet` job passes (exit 0). As
+# real code + tooling land, the gauntlet steps activate automatically.
+# =============================================================================
+name: ci
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # gauntlet — the BLOCKING quality gate. Mirrors the local pre-commit hook.
+  # ---------------------------------------------------------------------------
+  gauntlet:
+    name: gauntlet
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      # Install deps ONLY when a lockfile exists. In the scaffolding state there
+      # is no package-lock.json, so this step is a no-op and CI stays green.
+      - name: Install dependencies (if lockfile present)
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "package-lock.json found -> npm ci"
+            npm ci
+          else
+            echo "no package-lock.json -> skipping npm ci (nothing to install yet)"
+          fi
+
+      - name: Run gauntlet
+        shell: bash
+        run: bash scripts/gauntlet.sh
+
+  # ---------------------------------------------------------------------------
+  # rot-metrics — NON-BLOCKING observability. Never fails the build.
+  # ---------------------------------------------------------------------------
+  rot-metrics:
+    name: rot-metrics
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Report rot metrics (non-blocking)
+        shell: bash
+        run: node scripts/rot-metrics.mjs || true

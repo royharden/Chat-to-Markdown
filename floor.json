@@ -1,0 +1,13 @@
+{
+  "note": "Quality floors for the anti-rot guardrail. Every value ratchets UP as code lands; a floor may only be LOWERED via an ADR in docs/decisions/. minCoverage is a percentage (0-100); minFixtures is a count; lastVerified is an ISO-8601 date (or null until a real fixture is captured and verified).",
+  "global": {
+    "minCoverage": 0
+  },
+  "providers": {
+    "chatgpt": { "minCoverage": 0, "minFixtures": 0, "lastVerified": null },
+    "claude":  { "minCoverage": 0, "minFixtures": 0, "lastVerified": null },
+    "gemini":  { "minCoverage": 0, "minFixtures": 0, "lastVerified": null },
+    "grok":    { "minCoverage": 0, "minFixtures": 0, "lastVerified": null },
+    "meta":    { "minCoverage": 0, "minFixtures": 0, "lastVerified": null }
+  }
+}

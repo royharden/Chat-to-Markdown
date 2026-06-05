@@ -1,0 +1,15 @@
+.agent-work/
+node_modules/
+dist/
+build/
+coverage/
+.nyc_output/
+*.log
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db
+*.db-shm
+*.db-wal
+*.tsbuildinfo
+

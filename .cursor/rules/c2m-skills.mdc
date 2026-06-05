@@ -1,0 +1,12 @@
+---
+description: Chat-to-Markdown — anti-rot project rules (start here)
+alwaysApply: true
+---
+
+`AGENTS.md` at the repo root is the single source of truth — read it first. The repo root (`Chat-to-Markdown/`) is the only harness root; ignore the parent `C2M/` wrapper.
+
+Canonical skills live in `C:\Users\Roy Harden\OneDrive\PJ-OD\skills`; the `.cursor/skills-cursor/` copies are mirrors (never edit a mirror first).
+
+Apply for substantive work: `prime-c2m-chat-to-markdown` (session start), `ai-first-persistent-memory-and-planning-framework`, `testing-discipline-c2m-chrome-ext`, `typescript-chrome-extension-fix-discipline`, and `sync-skills-across-agents` when skills or instruction files change.
+
+Run `scripts/gauntlet.ps1` before declaring work done; never `--no-verify`. Do not commit `.agent-work/`.

@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+# =============================================================================
+# .githooks/pre-commit — runs the deterministic gauntlet before every commit.
+# -----------------------------------------------------------------------------
+# Activated by: git config core.hooksPath .githooks
+#   (run scripts/setup-hooks.sh or scripts/setup-hooks.ps1 once per clone).
+#
+# PROJECT POLICY: `git commit --no-verify` (and `-n`) is FORBIDDEN. The gauntlet
+# is the anti-rot guardrail; bypassing it defeats the entire substrate. If the
+# gauntlet blocks a legitimate change, FIX the underlying issue or lower a floor
+# via an ADR in docs/decisions/ — never skip the hook.
+#
+# A non-zero exit from the gauntlet aborts the commit.
+# =============================================================================
+
+set -u
+
+# Move to the repository top level so relative script paths resolve regardless
+# of the subdirectory the commit was issued from.
+ROOT=$(git rev-parse --show-toplevel) || {
+  echo "pre-commit: not inside a git work tree" >&2
+  exit 1
+}
+cd "$ROOT" || {
+  echo "pre-commit: cannot cd into repo root: $ROOT" >&2
+  exit 1
+}
+
+# Hand off to the single source of truth. exec replaces this process so the
+# gauntlet's exit code becomes the hook's exit code directly.
+exec sh "$ROOT/scripts/gauntlet.sh"
