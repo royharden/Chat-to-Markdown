@@ -73,7 +73,7 @@ The same gauntlet runs in every harness, in the git pre-commit hook, and in CI (
 ---
 
 ## Changelog
-- **1.0.1 (2026-09-24):** Adopted AgentNamer: boot section below, `.cursor/rules/agent-namer.mdc`, Claude Code hooks in `.claude/settings.json`; the registry `.agent-registry/` is gitignored. Canonical skills folder moved to `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\<name>` (was `...\PJ-OD\skills\<name>`; the old paths remain as machine-local redirects); updated §3, the boot section, `CLAUDE.md`, `.cursor/rules/` and `docs/c2m-skills-architecture.md`. Skill mirrors unchanged.
+- **1.0.1 (2026-09-24):** Adopted AgentNamer: boot section below, `.cursor/rules/agent-namer.mdc`; the Claude Code hooks stay per-machine in the gitignored `.claude/settings.local.json` (they hold absolute local paths that would break another clone, and a failing PreToolUse hook blocks the Agent tool); the registry `.agent-registry/` is gitignored. Canonical skills folder moved to `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\<name>` (was `...\PJ-OD\skills\<name>`; the old paths remain as machine-local redirects); updated §3, the boot section, `CLAUDE.md`, `.cursor/rules/` and `docs/c2m-skills-architecture.md`. Skill mirrors unchanged: the canonical `sync-skills-across-agents` skill still names the old folder, so refresh the mirrors after it is updated.
 - **1.0.0 (2026-06-05):** Initial constitution under the repo-rooted, mechanically-enforced anti-rot architecture. See `docs/decisions/ADR-0001-anti-rot-architecture.md`.
 
 <!-- AgentNamer:begin -->

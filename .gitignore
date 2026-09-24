@@ -14,3 +14,5 @@ coverage/
 *.tsbuildinfo
 # AgentNamer callsign registry (per-project agent log)
 .agent-registry/
+# Per-machine Claude Code settings (AgentNamer hooks hold absolute local paths)
+.claude/settings.local.json
