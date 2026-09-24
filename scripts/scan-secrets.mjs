@@ -3,8 +3,9 @@
 // scan-secrets.mjs — deterministic secret / PII scan (gauntlet step g).
 // -----------------------------------------------------------------------------
 // Zero dependencies (Node >= 18). Scans every file git would commit: tracked files
-// plus untracked files that are not ignored. Exits 1 when it finds anything, so the
-// pre-commit hook and CI block the commit.
+// plus untracked files that are not ignored, and also the STAGED copy of each staged file
+// (a commit holds the index, which can differ from the working tree). Exits 1 when it
+// finds anything, so the pre-commit hook and CI block the commit.
 //
 // This repo publishes golden DOM fixtures captured from live chat UIs, so the rules
 // concentrate on what those captures can leak: provider conversation URLs that carry a
@@ -27,7 +28,8 @@
 // =============================================================================
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -163,11 +165,8 @@ function globToRegExp(glob) {
   return new RegExp(`^${body}$`);
 }
 
-function loadAllowlist(root) {
-  const file = join(root, 'scripts', 'scan-secrets.allowlist.json');
-  if (!existsSync(file)) return [];
-  const parsed = JSON.parse(readFileSync(file, 'utf8'));
-  const entries = Array.isArray(parsed.allow) ? parsed.allow : [];
+function parseAllowlist(parsed) {
+  const entries = Array.isArray(parsed?.allow) ? parsed.allow : [];
   const ids = new Set(RULES.map((r) => r.id));
   return entries.map((e, i) => {
     if (!ids.has(e.rule) || !e.path || !String(e.reason ?? '').trim()) {
@@ -175,6 +174,11 @@ function loadAllowlist(root) {
     }
     return { rule: e.rule, path: globToRegExp(e.path), contains: e.contains ?? null };
   });
+}
+
+function loadAllowlist(root) {
+  const file = join(root, 'scripts', 'scan-secrets.allowlist.json');
+  return existsSync(file) ? parseAllowlist(JSON.parse(readFileSync(file, 'utf8'))) : [];
 }
 
 const isAllowed = (allowlist, finding) =>
@@ -225,6 +229,22 @@ function scanTree(root, explicitFiles) {
     scanned++;
     findings.push(...scanText(buf.toString('utf8'), rel.split('\\').join('/')));
   }
+
+  // A commit holds the INDEX, not the working tree. A file staged with a secret and then
+  // edited clean in the working tree passes the loop above yet would still be committed, so
+  // scan the staged copy of every staged file too. Findings identical to one already found in
+  // the working copy are not reported twice.
+  if (!explicitFiles) {
+    const seen = new Set(findings.map((f) => `${f.rule}|${f.path}|${f.line}|${f.col}|${f.text}`));
+    const staged = git(root, 'diff', '--cached', '--name-only', '-z', '--diff-filter=ACMR').toString('utf8').split('\0').filter(Boolean);
+    for (const rel of staged) {
+      const blob = git(root, 'show', `:${rel}`);
+      if (blob.length > MAX_BYTES || blob.subarray(0, 8192).includes(0)) continue;
+      for (const f of scanText(blob.toString('utf8'), rel)) {
+        if (!seen.has(`${f.rule}|${f.path}|${f.line}|${f.col}|${f.text}`)) findings.push({ ...f, where: 'staged' });
+      }
+    }
+  }
   return { findings, scanned };
 }
 
@@ -244,7 +264,7 @@ function scanHistory(root) {
     } else if (raw.startsWith('@@ ')) {
       line = Number(/\+(\d+)/.exec(raw)?.[1] ?? 1);
     } else if (raw.startsWith('+') && path) {
-      for (const f of scanText(raw.slice(1), path)) findings.push({ ...f, line, path: `${commit}:${path}` });
+      for (const f of scanText(raw.slice(1), path)) findings.push({ ...f, line, where: commit });
       line++;
     }
   }
@@ -318,13 +338,52 @@ function selfTest() {
       console.error(`self-test FAIL  ${rule.id}: rule has no test case`);
     }
   }
-  // The allowlist must refuse an entry that gives no reason.
+  const check = (ok, what) => {
+    if (!ok) {
+      failures++;
+      console.error(`self-test FAIL  ${what}`);
+    }
+  };
+
+  // Path globs: ** crosses folders, * does not.
+  check(globToRegExp('a/**/b.txt').test('a/x/y/b.txt'), 'glob ** should cross folders');
+  check(!globToRegExp('a/*.txt').test('a/b/c.txt'), 'glob * must not cross a slash');
+
+  // Allowlist: must be scoped by rule, path and text, and must refuse an entry with no reason.
+  const email = { rule: 'email-address', path: 'docs/a/b.md', text: j('someone', '@', 'corp-mail.io') };
+  const allow = parseAllowlist({ allow: [{ rule: 'email-address', path: 'docs/**', contains: j('someone', '@'), reason: 'test' }] });
+  check(isAllowed(allow, email), 'allowlist should cover a matching finding');
+  check(!isAllowed(allow, { ...email, path: 'test/a.md' }), 'allowlist must not cover another path');
+  check(!isAllowed(allow, { ...email, rule: 'jwt' }), 'allowlist must not cover another rule');
+  check(!isAllowed(allow, { ...email, text: j('other', '@', 'corp-mail.io') }), 'allowlist must not cover other text');
+  check(isAllowed(allow, { ...email, where: 'abc1234' }), 'a history finding (with a commit) must still be allowlistable by path');
+  for (const bad of [{ rule: 'email-address', path: 'docs/**' }, { rule: 'email-address', path: 'docs/**', reason: '  ' }, { rule: 'nope', path: 'x', reason: 'r' }]) {
+    let threw = false;
+    try {
+      parseAllowlist({ allow: [bad] });
+    } catch {
+      threw = true;
+    }
+    check(threw, `allowlist must refuse ${JSON.stringify(bad)}`);
+  }
+
+  // A commit holds the index: a file staged with a secret and then edited clean in the
+  // working tree must still be caught.
+  const dir = mkdtempSync(join(tmpdir(), 'scan-secrets-'));
   try {
-    globToRegExp('a/**/b.txt').test('a/x/y/b.txt') || (failures++, console.error('self-test FAIL  glob **'));
-    globToRegExp('a/*.txt').test('a/b/c.txt') && (failures++, console.error('self-test FAIL  glob * crossed a slash'));
+    git(dir, 'init', '-q');
+    mkdirSync(join(dir, 'test', 'fixtures'), { recursive: true });
+    const rel = 'test/fixtures/x.html';
+    writeFileSync(join(dir, rel), j('<a href="https://claude.ai/chat/', 'abcdef01-2345-6789-abcd-ef0123456789', '">x</a>\n'));
+    git(dir, 'add', rel);
+    writeFileSync(join(dir, rel), '<p>clean</p>\n');
+    const { findings } = scanTree(dir);
+    check(findings.some((f) => f.rule === 'conversation-url' && f.where === 'staged'), 'a staged secret hidden by a clean working copy must be caught');
+    check(scanTree(dir, [rel]).findings.length === 0, 'explicit --files must scan only the working copy');
   } catch (err) {
-    failures++;
-    console.error(`self-test FAIL  glob: ${err.message}`);
+    check(false, `staged-copy check could not run: ${err.message.split('\n')[0]}`);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
   console.log(failures ? `scan-secrets self-test: ${failures} failure(s)` : `scan-secrets self-test: ok (${RULES.length} rules)`);
   return failures === 0;
@@ -363,7 +422,9 @@ function main(argv) {
     return 0;
   }
   console.error(`scan-secrets: ${live.length} finding(s) in ${scanned} ${what}:`);
-  for (const f of live) console.error(`  ${f.path}:${f.line}:${f.col}  [${f.rule}]  ${f.why}  -> ${mask(f.text)}`);
+  for (const f of live) {
+    console.error(`  ${f.where ? `${f.where}:` : ''}${f.path}:${f.line}:${f.col}  [${f.rule}]  ${f.why}  -> ${mask(f.text)}`);
+  }
   console.error('Fix the file (redact or use an obviously synthetic value), or add a justified entry to scripts/scan-secrets.allowlist.json.');
   return 1;
 }
