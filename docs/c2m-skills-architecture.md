@@ -138,7 +138,7 @@ Every harness is rooted at the repo and enforced by the same gauntlet. Only the 
 
 ### A.8 Canonical source and sync
 
-The skills have a single canonical home in the shared `PJ-OD/skills/` directory, outside any individual project. Each skill's `SKILL.md` is edited there first. The **sync-skills-across-agents** skill then mirrors it outward into the repo-root harness folders (`.claude`, `.codex`, `.cursor`, `.grok`, `.agents`) and updates the instruction files together. Mirrors are caches and are never edited directly; if a mirror and the canonical copy disagree, the canonical copy wins. Sync also verifies that no duplicate skill folders exist anywhere except the repo root, so the single-root rule cannot quietly erode.
+The skills have a single canonical home in the shared `PJ-OD/skills/skills-bts/` directory, outside any individual project. Each skill's `SKILL.md` is edited there first. The **sync-skills-across-agents** skill then mirrors it outward into the repo-root harness folders (`.claude`, `.codex`, `.cursor`, `.grok`, `.agents`) and updates the instruction files together. Mirrors are caches and are never edited directly; if a mirror and the canonical copy disagree, the canonical copy wins. Sync also verifies that no duplicate skill folders exist anywhere except the repo root, so the single-root rule cannot quietly erode.
 
 ### A.9 Memory and context model
 

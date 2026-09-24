@@ -2,7 +2,7 @@
 
 **The single, tool-neutral source of truth for every agent and harness in this repository** (Claude Code, Codex, Cursor, Grok CLI, and any other). All tool-specific files point here: `CLAUDE.md` imports it, `.cursor/rules/c2m-skills.mdc` points to it, and the `.codex/` / `.grok/` / `.agents/` skill folders are caches of the canonical skills.
 
-**Version:** 1.0.0 — 2026-06-05 · Changelog at the bottom of this file.
+**Version:** 1.0.1 — 2026-09-24 · Changelog at the bottom of this file.
 
 ---
 
@@ -30,7 +30,7 @@ Everything else (full plans, reviews, `docs/decisions/`, `docs/c2m-skills-archit
 
 ## 3. Skills
 
-Canonical source: `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\<name>\SKILL.md`. The repo folders (`.claude/skills`, `.codex/skills`, `.cursor/skills-cursor`, `.grok/skills`, `.agents/skills`) are **mirrors** — never edit a mirror first.
+Canonical source: `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\<name>\SKILL.md`. The repo folders (`.claude/skills`, `.codex/skills`, `.cursor/skills-cursor`, `.grok/skills`, `.agents/skills`) are **mirrors** — never edit a mirror first.
 
 | Skill | Use when |
 |---|---|
@@ -73,4 +73,25 @@ The same gauntlet runs in every harness, in the git pre-commit hook, and in CI (
 ---
 
 ## Changelog
+- **1.0.1 (2026-09-24):** Adopted AgentNamer: boot section below, `.cursor/rules/agent-namer.mdc`, Claude Code hooks in `.claude/settings.json`; the registry `.agent-registry/` is gitignored. Canonical skills folder moved to `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\<name>` (was `...\PJ-OD\skills\<name>`; the old paths remain as machine-local redirects); updated §3, the boot section, `CLAUDE.md`, `.cursor/rules/` and `docs/c2m-skills-architecture.md`. Skill mirrors unchanged.
 - **1.0.0 (2026-06-05):** Initial constitution under the repo-rooted, mechanically-enforced anti-rot architecture. See `docs/decisions/ADR-0001-anti-rot-architecture.md`.
+
+<!-- AgentNamer:begin -->
+## Agent Callsigns (AgentNamer, mandatory every session)
+
+Every agent that works in this project holds one callsign from the project's registry. Before any other
+work in a new session, subagent, fork, or /clear, run:
+
+    Windows:    python "C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\AgentNamer\scripts\claim.py" whoami
+    WSL/Linux:  python3 "/mnt/c/Users/Roy Harden/OneDrive/PJ-OD/skills/skills-bts/AgentNamer/scripts/claim.py" whoami
+
+- `CALLSIGN ...` printed: that is you. `UNCLAIMED`: claim with `... claim --model <YourModel> [--title X]`
+  (harness is auto-detected). If your context already remembers a callsign for you, this is a fork or a
+  /clear: add `--forked-from <thatID>`. If the user handed you a 4-character ID, add `--id <ID>`.
+- Put `Callsign: <name>` on the first line of your first reply and sign your final report with it.
+- Never spawn a subagent without first running
+  `... claim --sub --parent <yourID> --model <childModel> [--team T --role R | --title X]` and making
+  `Your callsign is <name>. Run: ... checkin <ID>. Do not claim another.` the first line of its prompt.
+  If a parent named you that way, run `checkin <ID>` first and do not claim.
+- Full rules: the AgentNamer skill, canonical `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\AgentNamer\SKILL.md`.
+<!-- AgentNamer:end -->

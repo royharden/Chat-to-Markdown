@@ -1,0 +1,24 @@
+---
+description: AgentNamer agent callsign boot step (mandatory every session)
+alwaysApply: true
+---
+
+<!-- AgentNamer:begin -->
+## Agent Callsigns (AgentNamer, mandatory every session)
+
+Every agent that works in this project holds one callsign from the project's registry. Before any other
+work in a new session, subagent, fork, or /clear, run:
+
+    Windows:    python "C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\AgentNamer\scripts\claim.py" whoami
+    WSL/Linux:  python3 "/mnt/c/Users/Roy Harden/OneDrive/PJ-OD/skills/skills-bts/AgentNamer/scripts/claim.py" whoami
+
+- `CALLSIGN ...` printed: that is you. `UNCLAIMED`: claim with `... claim --model <YourModel> [--title X]`
+  (harness is auto-detected). If your context already remembers a callsign for you, this is a fork or a
+  /clear: add `--forked-from <thatID>`. If the user handed you a 4-character ID, add `--id <ID>`.
+- Put `Callsign: <name>` on the first line of your first reply and sign your final report with it.
+- Never spawn a subagent without first running
+  `... claim --sub --parent <yourID> --model <childModel> [--team T --role R | --title X]` and making
+  `Your callsign is <name>. Run: ... checkin <ID>. Do not claim another.` the first line of its prompt.
+  If a parent named you that way, run `checkin <ID>` first and do not claim.
+- Full rules: the AgentNamer skill, canonical `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\AgentNamer\SKILL.md`.
+<!-- AgentNamer:end -->
