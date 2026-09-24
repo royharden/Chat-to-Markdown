@@ -93,6 +93,7 @@ function publicIpv4(text) {
   const [a, b, c] = o;
   if (a === 0 || a === 10 || a === 127 || a >= 224) return false;
   if (a === 172 && b >= 16 && b <= 31) return false;
+  if (a === 100 && b >= 64 && b <= 127) return false; // carrier-grade NAT, RFC 6598
   if (a === 192 && b === 168) return false;
   if (a === 169 && b === 254) return false;
   if (a === 192 && b === 0 && c === 2) return false;
@@ -179,7 +180,9 @@ const RULES = [
     id: 'public-ip',
     why: 'public IPv4 address inside a fixture (a gate page prints the visitor\'s address)',
     scope: inFixtures,
-    re: /(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?![\d.])/g,
+    // Not inside a path, version or hyphenated name (`/lib/1.2.3.4/`, `node-20.11.1.0`, `v1.2.3.4`),
+    // but a sentence-final address ("...is 8.8.4.4.") still counts.
+    re: /(?<![\w/.-])(?:\d{1,3}\.){3}\d{1,3}(?![\w/-]|\.\d)/g,
     skip: (m) => !publicIpv4(m[0]),
   },
   {
@@ -232,7 +235,9 @@ function buildDenyRule(terms) {
     id: 'owner-term',
     why: 'a name from denyInFixtures appears inside a fixture (account menus and avatars print it)',
     scope: inFixtures,
-    re: new RegExp(source, 'gi'),
+    // Starts at a word boundary so "destroy hardened steel" does not match "Roy Harden"; there is
+    // deliberately no trailing boundary, so a mailbox such as "royhardenre" still matches "royharden".
+    re: new RegExp(`(?<![A-Za-z0-9])(?:${source})`, 'gi'),
   };
 }
 
@@ -557,8 +562,11 @@ const CASES = [
   [
     'public-ip',
     'test/fixtures/x/y.html',
-    [j('Your IP: 8.8.', '4.4'), j('addr 93.184.', '216.34')],
-    ['10.0.0.1', '192.168.1.5', '127.0.0.1', '172.20.0.9', '203.0.113.57', '198.51.100.7', '192.0.2.1', '0.0.0.0', '999.1.1.1', 'version 1.2.3', '169.254.0.1'],
+    [j('Your IP: 8.8.', '4.4'), j('addr 93.184.', '216.34'), j('Your IP is 8.8.', '4.4.'), j('<p>8.8.', '4.4</p>')],
+    [
+      '10.0.0.1', '192.168.1.5', '127.0.0.1', '172.20.0.9', '203.0.113.57', '198.51.100.7', '192.0.2.1', '0.0.0.0', '999.1.1.1',
+      'version 1.2.3', '169.254.0.1', '100.64.0.1', '/lib/1.2.3.4/lib.min.js', 'node-20.11.1.0', 'v1.2.3.4', '1.2.3.4.5',
+    ],
   ],
   ['us-ssn', 'a.txt', [j('123-45-', '6789')], ['2026-06-05', '000-12-3456', j('id 1234-', '123-45-6789-abcd')]],
   [
@@ -612,6 +620,8 @@ function selfTest(full) {
   check(flagged('user janeroe', 'test/fixtures/a.html', 'owner-term', [deny]), 'owner-term: should flag the second term');
   check(!flagged('Signed in as Jane Roe', 'docs/a.md', 'owner-term', [deny]), 'owner-term: must be fixture-scoped');
   check(!flagged('Roe v. Wade', 'test/fixtures/a.html', 'owner-term', [deny]), 'owner-term: must not flag other text');
+  for (const inside of ['Mojane Roe', 'Sunjaneroe', 'destroyjaneroe']) check(!flagged(inside, 'test/fixtures/a.html', 'owner-term', [deny]), `owner-term: must not flag inside a longer word: ${inside}`);
+  check(flagged('mailbox janeroesmith', 'test/fixtures/a.html', 'owner-term', [deny]), 'owner-term: a longer mailbox that starts with the term must still be flagged');
   check(buildDenyRule([]) === null, 'owner-term: no terms means no rule');
 
   // Encoded forms are decoded before scanning.
