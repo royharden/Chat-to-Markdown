@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Gemini code fixture</title>
+  </head>
+  <body data-provider="gemini" data-scenario="code-basic">
+    <main>
+      <h1 class="cdk-visually-hidden">Conversation with Gemini</h1>
+      <div class="conversation-container message-actions-hover-boundary">
+        <user-query>
+          <span class="cdk-visually-hidden screen-reader-user-query-label">You said</span>
+          <div class="query-text gds-body-l" role="heading">
+            Teach me how to write a beginner Python function that converts Fahrenheit to Celsius. Include a short code block with the language label Python.
+          </div>
+          <button aria-label="Copy prompt"></button>
+          <button aria-label="Edit"></button>
+        </user-query>
+        <model-response>
+          <div class="response-container response-container-with-gpi">
+            <h2 class="cdk-visually-hidden screen-reader-model-response-label">Gemini said</h2>
+            <message-content>
+              <p>Converting temperatures is a classic way to practice writing functions.</p>
+              <h3>The Python Code</h3>
+              <div class="code-block">
+                <span class="language-label">Python</span>
+                <button aria-label="Download code"></button>
+                <button aria-label="Copy code"></button>
+                <pre><code role="text" class="code-container formatted">def fahrenheit_to_celsius(fahrenheit):
+    """Converts a temperature from Fahrenheit to Celsius."""
+    celsius = (fahrenheit - 32) * 5 / 9
+    return celsius
+
+
+# Example usage:
+f_temp = 68
+c_temp = fahrenheit_to_celsius(f_temp)
+
+print(f"{f_temp} F is equal to {c_temp} C")</code></pre>
+              </div>
+              <h3>Breaking It Down</h3>
+              <p>The <code>def</code> keyword creates the function and <code>return</code> gives the converted value back.</p>
+            </message-content>
+            <div class="response-footer gap complete">
+              <button aria-label="Redo"></button>
+              <button aria-label="Copy"></button>
+              <button aria-label="Show more options" aria-expanded="false"></button>
+            </div>
+          </div>
+        </model-response>
+      </div>
+    </main>
+  </body>
+</html>

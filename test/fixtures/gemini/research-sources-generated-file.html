@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Gemini research sources generated-file fixture</title>
+  </head>
+  <body data-provider="gemini" data-scenario="research-sources-generated-file">
+    <main>
+      <h1 class="cdk-visually-hidden">Conversation with Gemini</h1>
+      <div class="conversation-container message-actions-hover-boundary">
+        <user-query>
+          <span class="cdk-visually-hidden screen-reader-user-query-label">You said</span>
+          <div class="query-text gds-body-l" role="heading">
+            Create a short Markdown file about why the Python requests library is popular. Include two current web sources as footnotes or citations with links. If you create a downloadable document or canvas, make that visible in the chat.
+          </div>
+        </user-query>
+        <model-response>
+          <div class="response-container response-container-with-gpi">
+            <processing-state class="extension-processing-state">
+              <section class="processing-state_container processing-state_container--expanded">
+                <button class="processing-state_button" aria-expanded="true">Analysis</button>
+                <div class="processing-state_details">Query successful</div>
+                <div class="thoughts-container"></div>
+              </section>
+            </processing-state>
+            <h2 class="cdk-visually-hidden screen-reader-model-response-label">Gemini said</h2>
+            <message-content>
+              <div class="code-block">
+                <span class="language-label">Python</span>
+                <button aria-label="Download code"></button>
+                <button aria-label="Copy code"></button>
+                <pre><code role="text" class="code-container formatted">markdown_content = """# Why the Python Requests Library is Popular
+
+The requests library is one of the most widely used third-party packages in the Python ecosystem.
+
+## References
+
+1. Real Python: Python's Requests Library (Guide)
+2. GeeksforGeeks: Python Requests Module
+"""</code></pre>
+              </div>
+              <pre><code role="text" class="code-result-container">File written successfully to why_python_requests_is_popular.md</code></pre>
+              <pre><code role="text" class="code-container formatted no-decoration-radius">Your Markdown file is ready
+[file-tag: code-generated-file-0-synthetic]
+
+Here is the content of the generated Markdown file explaining why the Python requests library is so popular.</code></pre>
+              <h2>References &amp; Sources</h2>
+              <a href="https://realpython.com/python-requests/">Real Python: Python's Requests Library (Guide)</a>
+              <a href="https://www.geeksforgeeks.org/python-requests-tutorial/">GeeksforGeeks: Python Requests Module</a>
+              <sources-list></sources-list>
+            </message-content>
+            <div class="response-footer gap complete">
+              <button aria-label="Redo"></button>
+              <button aria-label="Copy"></button>
+              <button aria-label="Show more options" aria-expanded="false"></button>
+            </div>
+          </div>
+        </model-response>
+      </div>
+    </main>
+  </body>
+</html>

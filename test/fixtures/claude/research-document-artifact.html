@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Claude research document artifact fixture</title>
+  </head>
+  <body data-provider="claude" data-scenario="research-document-artifact">
+    <main>
+      <div data-testid="chat-stale-nav-frame">
+        <h2 class="sr-only select-none">You said: Create a short Markdown file about why the Python requests library is popular.</h2>
+        <div data-testid="user-message">
+          <p>Create a short Markdown file about why the Python requests library is popular. Include two current web sources as footnotes or citations with links. If you create a downloadable document or canvas, make that visible in the chat.</p>
+        </div>
+        <h2 class="sr-only select-none">Claude responded: Here's the Markdown file - you can download it above.</h2>
+        <button class="group/status">Synthesized sources and structured markdown documentation</button>
+        <span role="status" class="sr-only">Synthesized sources and structured markdown documentation</span>
+        <p>Here's the Markdown file - you can download it above. A quick summary of what's inside:</p>
+        <ol>
+          <li><strong>Simple API</strong> - <code>requests.get(url)</code> is enough to start.</li>
+          <li><strong>Maturity</strong> - sensible defaults for common HTTP work.</li>
+        </ol>
+        <p>
+          Two footnoted sources are linked at the bottom:
+          <a href="https://brightdata.com/blog/web-data/best-python-http-clients">Bright Data</a>
+          <a href="https://blog.jetbrains.com/pycharm/2025/09/the-most-popular-python-frameworks-and-libraries-in-2025-2/">JetBrains</a>
+        </p>
+        <section class="artifact-card">
+          <button aria-label="View Python requests popularity"></button>
+          <span>Python requests popularity</span>
+          <span>Document · MD</span>
+          <button aria-label="Open in Drive"></button>
+          <button aria-label="Download Python requests popularity">Download</button>
+        </section>
+        <div role="group" aria-label="Message actions">
+          <button data-testid="action-bar-copy" aria-label="Copy"></button>
+          <button data-testid="action-bar-read-aloud" aria-label="Read aloud"></button>
+          <button data-testid="action-bar-retry" aria-label="Retry"></button>
+        </div>
+      </div>
+      <aside class="artifact-panel">
+        <div role="radiogroup" aria-label="File view mode">
+          <button role="radio" aria-label="Preview" aria-checked="true"></button>
+          <button role="radio" aria-label="Code" aria-checked="false"></button>
+        </div>
+        <h2>Python requests popularity · MD</h2>
+        <button aria-label="Open in Drive"></button>
+        <div role="group" aria-label="More options">
+          <button>Copy</button>
+          <button aria-label="More options"></button>
+        </div>
+        <button aria-label="Refresh"></button>
+        <button aria-label="Go back"></button>
+        <article>
+          <h1>Why Python's <code>requests</code> Library Is So Popular</h1>
+          <p>The <code>requests</code> library is widely used because it makes HTTP calls simple.<sup><a href="#user-content-fn-1">1</a></sup></p>
+          <h2>Key Reasons for Its Popularity</h2>
+          <h3>1. Remarkably Simple API</h3>
+          <p>Fetching a web resource requires nothing more than <code>requests.get(url)</code>.</p>
+          <h3>2. Battle-Tested Maturity</h3>
+          <p>It handles redirects, decoding, SSL verification, and timeouts.<sup><a href="#user-content-fn-2">2</a></sup></p>
+          <hr>
+          <section class="footnotes">
+            <h2 class="sr-only">Footnotes</h2>
+            <ol>
+              <li id="user-content-fn-1">
+                <p>Bright Data - <em>Best Python HTTP Clients 2026</em>: <a href="https://brightdata.com/blog/web-data/best-python-http-clients">https://brightdata.com/blog/web-data/best-python-http-clients</a> <a aria-label="Back to reference 1" href="#user-content-fnref-1">↩</a></p>
+              </li>
+              <li id="user-content-fn-2">
+                <p>JetBrains PyCharm Blog - <em>The Most Popular Python Frameworks and Libraries in 2025</em>: <a href="https://blog.jetbrains.com/pycharm/2025/09/the-most-popular-python-frameworks-and-libraries-in-2025-2/">https://blog.jetbrains.com/pycharm/2025/09/the-most-popular-python-frameworks-and-libraries-in-2025-2/</a> <a aria-label="Back to reference 2" href="#user-content-fnref-2">↩</a></p>
+              </li>
+            </ol>
+          </section>
+        </article>
+      </aside>
+    </main>
+  </body>
+</html>

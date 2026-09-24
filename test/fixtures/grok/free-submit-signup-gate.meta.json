@@ -1,0 +1,13 @@
+{
+  "provider": "grok",
+  "scenario": "free-submit-signup-gate",
+  "url": "https://grok.com/",
+  "capturedAt": "2026-06-05T00:00:00-04:00",
+  "lastVerified": "2026-06-05",
+  "source": "agent-browser live reconnaissance, sanitized minimal DOM",
+  "authenticated": false,
+  "conversationDomAvailable": false,
+  "prompt": "Teach me how to write a beginner Python function that converts Fahrenheit to Celsius. Include a short code block with the language label Python.",
+  "privacy": "Synthetic prompt only. No assistant response was available.",
+  "what_bug_this_catches": "Grok parser must report unauthenticated continuation gates and must not treat the submitted prompt as a complete conversation."
+}

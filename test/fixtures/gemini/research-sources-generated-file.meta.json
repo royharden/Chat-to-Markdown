@@ -1,0 +1,13 @@
+{
+  "provider": "gemini",
+  "scenario": "research-sources-generated-file",
+  "url": "https://gemini.google.com/app/REDACTED-CONVERSATION-ID",
+  "capturedAt": "2026-06-05T00:00:00-04:00",
+  "lastVerified": "2026-06-05",
+  "source": "agent-browser live Gemini conversation, sanitized/minimized",
+  "authenticated": false,
+  "conversationDomAvailable": true,
+  "prompt": "Create a short Markdown file about why the Python requests library is popular. Include two current web sources as footnotes or citations with links. If you create a downloadable document or canvas, make that visible in the chat.",
+  "privacy": "Synthetic prompt and synthetic generated Markdown/file text only.",
+  "what_bug_this_catches": "Gemini parser must preserve Analysis state, source links, and generated-file signals instead of flattening them into ordinary text."
+}

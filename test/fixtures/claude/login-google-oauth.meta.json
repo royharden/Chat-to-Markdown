@@ -1,0 +1,12 @@
+{
+  "provider": "claude",
+  "scenario": "login-google-oauth",
+  "url": "https://claude.ai/login",
+  "capturedAt": "2026-06-05T00:00:00-04:00",
+  "lastVerified": "2026-06-05",
+  "source": "Browser plugin live Claude login flow, sanitized/minimized",
+  "authenticated": false,
+  "conversationDomAvailable": false,
+  "privacy": "No private conversation content. Fixture contains only login/OAuth UI text observed in Browser plugin.",
+  "what_bug_this_catches": "Claude parser must report login/OAuth gates and must not mark artifact/document capture as covered."
+}

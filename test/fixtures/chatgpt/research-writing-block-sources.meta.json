@@ -1,0 +1,13 @@
+{
+  "provider": "chatgpt",
+  "scenario": "research-writing-block-sources",
+  "url": "https://chatgpt.com/",
+  "capturedAt": "2026-06-05T00:00:00-04:00",
+  "lastVerified": "2026-06-05",
+  "source": "Browser plugin live ChatGPT conversation, sanitized/minimized",
+  "authenticated": false,
+  "conversationDomAvailable": true,
+  "prompt": "Create a short Markdown file about why the Python requests library is popular. Include two current web sources as footnotes or citations with links. If you create a downloadable document or canvas, make that visible in the chat.",
+  "privacy": "Synthetic prompt and synthetic generated Markdown-like content only. Sponsored card text is included only as UI chrome to exclude.",
+  "what_bug_this_catches": "ChatGPT parser must preserve writing-block artifacts and citation pills while excluding sponsored cards and other non-turn UI."
+}

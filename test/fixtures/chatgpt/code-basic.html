@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>ChatGPT code fixture</title>
+  </head>
+  <body data-provider="chatgpt" data-scenario="code-basic">
+    <main>
+      <section data-testid="conversation-turn-1">
+        <h4 class="sr-only select-none">You said:</h4>
+        <div data-message-author-role="user">
+          Teach me how to write a beginner Python function that converts Fahrenheit to Celsius. Include a short code block with the language label Python.
+        </div>
+        <div role="group" aria-label="Your message actions">
+          <button data-testid="copy-turn-action-button" aria-label="Copy message"></button>
+        </div>
+      </section>
+      <section data-testid="conversation-turn-2">
+        <h4 class="sr-only select-none">ChatGPT said:</h4>
+        <div data-message-author-role="assistant">
+          <p>A Python function is a reusable block of code that takes input, does some work, and returns a result.</p>
+          <p>To convert Fahrenheit to Celsius, use this formula:</p>
+          <math>C = (F - 32) \times \frac{5}{9}</math>
+          <p>Here's a simple beginner-friendly function:</p>
+          <div class="code-block">
+            <span>Python</span>
+            <button aria-label="Copy"></button>
+            <pre class="overflow-visible"><code>def fahrenheit_to_celsius(fahrenheit):
+    celsius = (fahrenheit - 32) * 5 / 9
+    return celsius
+
+# Example usage
+temp_f = 68
+temp_c = fahrenheit_to_celsius(temp_f)
+print(temp_c)</code></pre>
+          </div>
+          <h3>How it works</h3>
+          <ul>
+            <li><code>def fahrenheit_to_celsius(fahrenheit):</code> creates a function.</li>
+            <li><code>return celsius</code> sends the result back.</li>
+          </ul>
+        </div>
+        <div role="group" aria-label="Response actions">
+          <button data-testid="copy-turn-action-button" aria-label="Copy response"></button>
+          <button aria-label="Share"></button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

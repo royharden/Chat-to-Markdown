@@ -1,0 +1,15 @@
+{
+  "provider": "claude",
+  "scenario": "research-document-artifact",
+  "url": "https://claude.ai/chat/REDACTED-CONVERSATION-ID",
+  "capturedAt": "2026-06-08T00:00:00-04:00",
+  "lastVerified": "2026-06-08",
+  "source": "Browser plugin signed-in Claude conversation and opened artifact panel, sanitized/minimized",
+  "authenticated": true,
+  "conversationDomAvailable": true,
+  "prompt": "Create a short Markdown file about why the Python requests library is popular. Include two current web sources as footnotes or citations with links. If you create a downloadable document or canvas, make that visible in the chat.",
+  "privacy": "Synthetic prompt and synthetic generated Markdown/document content only. Sidebar/history content intentionally excluded.",
+  "downloadObserved": false,
+  "downloadObservationNote": "Visible Download button was present, but Codex in-app Browser reported downloads are not supported, so payload was not verified.",
+  "what_bug_this_catches": "Claude parser must preserve document artifact cards, artifact panel content, Preview/Code view controls, Open in Drive/Download controls, source links, and Markdown footnotes."
+}

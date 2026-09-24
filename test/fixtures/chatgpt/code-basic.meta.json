@@ -1,0 +1,13 @@
+{
+  "provider": "chatgpt",
+  "scenario": "code-basic",
+  "url": "https://chatgpt.com/",
+  "capturedAt": "2026-06-05T00:00:00-04:00",
+  "lastVerified": "2026-06-05",
+  "source": "Browser plugin live ChatGPT conversation, sanitized/minimized",
+  "authenticated": false,
+  "conversationDomAvailable": true,
+  "prompt": "Teach me how to write a beginner Python function that converts Fahrenheit to Celsius. Include a short code block with the language label Python.",
+  "privacy": "Synthetic prompt and synthetic generated tutorial content only.",
+  "what_bug_this_catches": "ChatGPT parser must prefer data-message-author-role and conversation-turn containers, preserve math and code language, and avoid duplicating wrapper pre/code text."
+}

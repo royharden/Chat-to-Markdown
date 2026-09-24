@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>ChatGPT research writing block fixture</title>
+  </head>
+  <body data-provider="chatgpt" data-scenario="research-writing-block-sources">
+    <main>
+      <section data-testid="conversation-turn-1">
+        <h4 class="sr-only select-none">You said:</h4>
+        <div data-message-author-role="user">
+          Create a short Markdown file about why the Python requests library is popular. Include two current web sources as footnotes or citations with links. If you create a downloadable document or canvas, make that visible in the chat.
+        </div>
+      </section>
+      <section data-testid="conversation-turn-2">
+        <h4 class="sr-only select-none">ChatGPT said:</h4>
+        <div data-message-author-role="assistant">
+          <p>Here's a short Markdown file you can copy into <code>requests-popularity.md</code>:</p>
+          <div data-testid="writing-block-container">
+            <div data-testid="writing-block-header-sticky-container">
+              <button data-testid="writing-block-header-magic-edit-button" aria-label="Edit"></button>
+              <button aria-label="Copy"></button>
+            </div>
+            <article>
+              <h1>Why the Python Requests Library Is Popular</h1>
+              <p>The Python <strong>Requests</strong> library is one of the most widely used tools for making HTTP requests.</p>
+              <ul>
+                <li><strong>Ease of use:</strong> Simple functions like <code>requests.get()</code> and <code>requests.post()</code> make HTTP operations straightforward.</li>
+                <li><strong>Readable code:</strong> Requests hides much of the complexity of lower-level networking libraries.</li>
+              </ul>
+              <h2>References</h2>
+              <p>
+                Sources supporting the content:
+                <span data-testid="webpage-citation-pill">
+                  <a href="https://pypi.org/project/requests/?utm_source=chatgpt.com">pypi.org +1</a>
+                </span>
+              </p>
+            </article>
+          </div>
+        </div>
+        <div role="group" aria-label="Response actions">
+          <button data-testid="copy-turn-action-button" aria-label="Copy response"></button>
+          <button aria-label="Share"></button>
+          <button aria-label="Sources">Sources</button>
+        </div>
+      </section>
+      <aside data-testid="image-card-v2" role="link" data-sponsored="true">
+        <p>Guidde</p>
+        <p>Sponsored</p>
+        <p>guidde: Create Guides 11x Faster</p>
+      </aside>
+    </main>
+  </body>
+</html>

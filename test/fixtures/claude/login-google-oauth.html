@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Claude Browser login fixture</title>
+  </head>
+  <body data-provider="claude" data-scenario="login-google-oauth">
+    <main>
+      <h2>Think fast, build faster</h2>
+      <h3>Brainstorm in chat, build in Cowork</h3>
+      <button>Continue with Google</button>
+      <label>Email* <input placeholder="Enter your email"></label>
+      <button>Continue with email</button>
+      <button>Continue with SSO</button>
+      <section data-plan="free">
+        <h3>Free</h3>
+        <p>Try Claude</p>
+        <button>Try Claude</button>
+      </section>
+    </main>
+    <section data-provider="google-oauth" data-after-click="try-claude">
+      <h1>Sign in</h1>
+      <p>to continue to Claude</p>
+      <input aria-label="Email or phone">
+      <button>Next</button>
+      <button>Create account</button>
+    </section>
+  </body>
+</html>

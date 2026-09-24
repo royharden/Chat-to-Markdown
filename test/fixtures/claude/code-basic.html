@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Claude code fixture</title>
+  </head>
+  <body data-provider="claude" data-scenario="code-basic">
+    <main>
+      <div data-testid="chat-stale-nav-frame">
+        <h2 class="sr-only select-none">You said: Teach me how to write a beginner Python function that converts Fahrenheit to Celsius.</h2>
+        <div data-testid="user-message">
+          <p>Teach me how to write a beginner Python function that converts Fahrenheit to Celsius. Include a short code block with the language label Python.</p>
+        </div>
+        <div role="group" aria-label="Message actions">
+          <button aria-label="Retry"></button>
+          <button data-testid="action-bar-edit" aria-label="Edit"></button>
+          <button data-testid="action-bar-copy" aria-label="Copy"></button>
+        </div>
+        <h2 class="sr-only select-none">Claude responded: Converting Fahrenheit to Celsius in Python</h2>
+        <button class="group/status">Identified straightforward educational request requiring clear explanation</button>
+        <span role="status" class="sr-only">Identified straightforward educational request requiring clear explanation</span>
+        <h3>Converting Fahrenheit to Celsius in Python</h3>
+        <p>The formula is: <strong>C = (F - 32) x 5/9</strong></p>
+        <p>Here's how you turn that into a function:</p>
+        <div role="group" aria-label="python code">
+          <button aria-label="Copy to clipboard"></button>
+          <span>python</span>
+          <pre class="code-block__code"><code class="language-python">def fahrenheit_to_celsius(fahrenheit):
+    celsius = (fahrenheit - 32) * 5 / 9
+    return round(celsius, 2)
+
+# Example usage
+print(fahrenheit_to_celsius(32))   # -> 0.0 (freezing)
+print(fahrenheit_to_celsius(212))  # -> 100.0 (boiling)</code></pre>
+        </div>
+        <p><strong>Breaking it down:</strong></p>
+        <ul>
+          <li><code>def</code> starts a function definition.</li>
+          <li><code>return</code> sends the result back.</li>
+        </ul>
+        <div role="group" aria-label="Message actions">
+          <button data-testid="action-bar-copy" aria-label="Copy"></button>
+          <button data-testid="action-bar-read-aloud" aria-label="Read aloud"></button>
+          <button data-testid="action-bar-retry" aria-label="Retry"></button>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

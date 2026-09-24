@@ -1,0 +1,13 @@
+{
+  "provider": "claude",
+  "scenario": "code-basic",
+  "url": "https://claude.ai/chat/REDACTED-CONVERSATION-ID",
+  "capturedAt": "2026-06-08T00:00:00-04:00",
+  "lastVerified": "2026-06-08",
+  "source": "Browser plugin signed-in Claude conversation, sanitized/minimized",
+  "authenticated": true,
+  "conversationDomAvailable": true,
+  "prompt": "Teach me how to write a beginner Python function that converts Fahrenheit to Celsius. Include a short code block with the language label Python.",
+  "privacy": "Synthetic prompt and synthetic generated tutorial content only. Sidebar/history content intentionally excluded.",
+  "what_bug_this_catches": "Claude parser must preserve screen-reader role labels, thinking/status summaries, language-labelled code groups, and message actions without capturing sidebar history."
+}

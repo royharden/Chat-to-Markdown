@@ -1,0 +1,12 @@
+{
+  "provider": "chatgpt",
+  "scenario": "access-gate-cloudflare",
+  "url": "https://chatgpt.com/",
+  "capturedAt": "2026-06-05T00:00:00-04:00",
+  "lastVerified": "2026-06-05",
+  "source": "agent-browser live reconnaissance, sanitized minimal DOM",
+  "authenticated": false,
+  "conversationDomAvailable": false,
+  "privacy": "No private conversation content. Fixture contains only access-gate text observed in automation.",
+  "what_bug_this_catches": "A parser must warn on provider access gates instead of emitting an empty successful transcript."
+}
