@@ -306,5 +306,5 @@ Current fixture:
 - Each provider has at least one code fixture, one research/source fixture, and one artifact or attachment fixture before its parser starts.
 - Gemini may be the first reference provider because it already has live unauthenticated conversation fixtures.
 - ChatGPT, Claude, Grok, and Meta require authenticated/manual live recon before their provider parsers start.
-- Every fixture needs a `.meta.json` with `lastVerified`, prompt, scenario, privacy note, and `what_bug_this_catches`.
+- Every fixture needs a `.meta.json` with `lastVerified`, scenario, privacy note, and `what_bug_this_catches`, plus the `prompt` whenever one was submitted.
 - Golden Markdown snapshots must be added with the first parser/emitter implementation, not during this planning-only pass.
