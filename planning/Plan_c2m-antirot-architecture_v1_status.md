@@ -16,7 +16,7 @@
 - Phases 1–4 complete. Repo carries: constitution + memory (`AGENTS.md`, `ARCHITECTURE.md`, `LESSONS.md`, `README.md`, `CLAUDE.md`), `planning/` (manifest + immutable plan + status), `docs/` (decisions + architecture explainer), `floor.json`, `scripts/`, `.github/`, `.githooks/`, `test/`, gitignored `.agent-work/`, and harness mirrors (`.claude/.codex/.cursor/.grok/.agents`).
 - Gauntlet verified exit 0; node v24.14.1 present; git hook active.
 - Parent `C2M/` reduced to `.hide`, `_archive/`, `Chat-to-Markdown/`, and `AGENTS.md`/`README.md` redirects.
-- Committed: everything above went in as `a4fe66a` (2026-06-05).
+- Committed: everything above went in as `a4fe66a` (2026-06-05), except `test/` (first committed with the fixtures below) and the gitignored `.agent-work/`.
 - 2026-09-24 follow-up commits: AgentNamer adoption and the `skills-bts` canonical-path move (`AGENTS.md` 1.0.1); ADR-0002 (proposed) and `planning/requirements-capture-spec.md` (draft) — both still awaiting user review; 11 golden DOM fixtures under `test/fixtures/` with `floor.json` ratcheted to their real counts. The gauntlet still skips every step (no `package.json`), including the secret/PII scan, so fixtures were checked by hand for private data before publishing.
 
 ## Handoff
