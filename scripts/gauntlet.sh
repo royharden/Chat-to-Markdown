@@ -23,6 +23,8 @@
 #   - A step that EXECUTES and fails -> recorded FAIL, gauntlet exits 1.
 #   - A step whose tooling/script is absent -> SKIP (never fails the gauntlet).
 #   - If nothing executed (pure scaffolding state) -> exit 0.
+#   - Exception: (g) runs scripts/scan-secrets.mjs directly whenever it exists (no
+#     package.json needed) and is FAIL-CLOSED: if node is missing the step FAILS.
 #
 # Idempotent and side-effect-free except for writing its own stdout/stderr.
 # Portable: runs under POSIX sh on Linux CI, macOS, and Git-for-Windows.
@@ -101,6 +103,31 @@ skip_with_todo() {
   record "SKIP" "${_label} (TODO: ${_future})"
 }
 
+# run_node_step <step-label> <script-path>
+# Runs a standalone node script that needs no package.json: first its --self-test (so a
+# broken scanner cannot pass silently), then the script itself. FAIL-CLOSED: if the
+# script exists but node does not, the step FAILS rather than skipping a security check.
+run_node_step() {
+  _label="$1"
+  _script="$2"
+  echo ">>> RUN  ${_label}  (node ${_script})"
+  EXEC_COUNT=$((EXEC_COUNT + 1))
+  if ! command -v node >/dev/null 2>&1; then
+    echo "<<< FAIL ${_label} (node not found; cannot run ${_script})"
+    record "FAIL" "$_label"
+    FAIL_COUNT=$((FAIL_COUNT + 1))
+    return
+  fi
+  if node "$_script" --self-test && node "$_script"; then
+    echo "<<< PASS ${_label}"
+    record "PASS" "$_label"
+  else
+    echo "<<< FAIL ${_label}"
+    record "FAIL" "$_label"
+    FAIL_COUNT=$((FAIL_COUNT + 1))
+  fi
+}
+
 echo "============================================================"
 echo " Chat-to-Markdown gauntlet"
 echo " repo root: ${REPO_ROOT}"
@@ -132,7 +159,10 @@ run_npm_step "(f) web-ext/manifest lint" "lint:ext"
 # --- (g) secret / PII scan ---------------------------------------------------
 # Prefer an npm script if one is defined; otherwise SKIP with a TODO that names
 # the future standalone scanner.
-if has_script "scan:secrets"; then
+if [ -f "$REPO_ROOT/scripts/scan-secrets.mjs" ]; then
+  # Runs directly (no package.json needed). A `scan:secrets` npm script is optional.
+  run_node_step "(g) secret/PII scan" "scripts/scan-secrets.mjs"
+elif has_script "scan:secrets"; then
   run_npm_step "(g) secret/PII scan" "scan:secrets"
 else
   skip_with_todo "(g) secret/PII scan" "scripts/scan-secrets.mjs"

@@ -26,6 +26,8 @@
     - A step that EXECUTES and fails -> recorded FAIL, gauntlet exits 1.
     - A step whose tooling/script is absent -> SKIP (never fails the gauntlet).
     - If nothing executed (pure scaffolding state) -> exit 0.
+    - Exception: (g) runs scripts/scan-secrets.mjs directly whenever it exists (no
+      package.json needed) and is FAIL-CLOSED: if node is missing the step FAILS.
 
   Idempotent and side-effect-free except for writing its own output. Paths with
   spaces (Windows + OneDrive) are quoted throughout.
@@ -101,6 +103,36 @@ function Skip-WithTodo {
   Record -Status 'SKIP' -Label "$Label (TODO: $Future)"
 }
 
+# Invoke-NodeStep <label> <script-path>: run a standalone node script that needs no
+# package.json -- first its --self-test (so a broken scanner cannot pass silently), then
+# the script itself. FAIL-CLOSED: if the script exists but node does not, the step FAILS
+# rather than skipping a security check.
+function Invoke-NodeStep {
+  param([string]$Label, [string]$ScriptPath)
+  Write-Host ">>> RUN  $Label  (node $ScriptPath)"
+  $script:ExecCount++
+  if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+    Write-Host "<<< FAIL $Label (node not found; cannot run $ScriptPath)"
+    Record -Status 'FAIL' -Label $Label
+    $script:FailCount++
+    return
+  }
+  & node $ScriptPath --self-test
+  $code = $LASTEXITCODE
+  if ($code -eq 0) {
+    & node $ScriptPath
+    $code = $LASTEXITCODE
+  }
+  if ($code -eq 0) {
+    Write-Host "<<< PASS $Label"
+    Record -Status 'PASS' -Label $Label
+  } else {
+    Write-Host "<<< FAIL $Label (exit $code)"
+    Record -Status 'FAIL' -Label $Label
+    $script:FailCount++
+  }
+}
+
 Write-Host "============================================================"
 Write-Host " Chat-to-Markdown gauntlet"
 Write-Host " repo root: $RepoRoot"
@@ -130,7 +162,10 @@ Invoke-NpmStep -Label '(e) golden-snapshot check' -Script 'test:golden'
 Invoke-NpmStep -Label '(f) web-ext/manifest lint' -Script 'lint:ext'
 
 # --- (g) secret / PII scan ---------------------------------------------------
-if (Test-NpmScript -Name 'scan:secrets') {
+if (Test-Path -LiteralPath (Join-Path $RepoRoot 'scripts/scan-secrets.mjs')) {
+  # Runs directly (no package.json needed). A `scan:secrets` npm script is optional.
+  Invoke-NodeStep -Label '(g) secret/PII scan' -ScriptPath 'scripts/scan-secrets.mjs'
+} elseif (Test-NpmScript -Name 'scan:secrets') {
   Invoke-NpmStep -Label '(g) secret/PII scan' -Script 'scan:secrets'
 } else {
   Skip-WithTodo -Label '(g) secret/PII scan' -Future 'scripts/scan-secrets.mjs'

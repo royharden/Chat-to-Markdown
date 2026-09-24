@@ -5,7 +5,7 @@ Date: 2026-06-05.
 
 ## Context
 
-Chat-to-Markdown needs a small Manifest V3 Chromium extension with strict TypeScript, deterministic tests, minimal permissions, and parser/emitter boundaries that can survive provider DOM churn. The existing guardrail substrate expects npm scripts named `lint`, `typecheck`, `test:unit`, `test:integration`, `test:golden`, `lint:ext`, `scan:secrets`, and `scan:dupes` (the exact names `scripts/gauntlet.ps1` and `gauntlet.sh` gate on) to activate checks as soon as product code is scaffolded.
+Chat-to-Markdown needs a small Manifest V3 Chromium extension with strict TypeScript, deterministic tests, minimal permissions, and parser/emitter boundaries that can survive provider DOM churn. The existing guardrail substrate expects npm scripts named `lint`, `typecheck`, `test:unit`, `test:integration`, `test:golden`, `lint:ext`, `scan:secrets`, and `scan:dupes` (the exact names `scripts/gauntlet.ps1` and `gauntlet.sh` gate on; `scan:secrets` is optional because `scripts/scan-secrets.mjs` already runs directly) to activate checks as soon as product code is scaffolded.
 
 The main tooling options considered for the scaffold are CRXJS/Vite and Plasmo.
 

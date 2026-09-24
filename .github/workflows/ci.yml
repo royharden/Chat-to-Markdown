@@ -2,8 +2,9 @@
 # CI — deterministic anti-rot gauntlet + non-blocking rot metrics.
 # -----------------------------------------------------------------------------
 # Runs on push and pull_request to ANY branch. In the current no-product-code
-# state every gauntlet step SKIPs and the `gauntlet` job passes (exit 0). As
-# real code + tooling land, the gauntlet steps activate automatically.
+# state every gauntlet step SKIPs except the secret/PII scan (scripts/scan-secrets.mjs,
+# which needs no package.json), so the `gauntlet` job passes (exit 0) while that scan is
+# clean. As real code + tooling land, the other gauntlet steps activate automatically.
 # =============================================================================
 name: ci
 
