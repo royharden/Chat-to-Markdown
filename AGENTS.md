@@ -2,7 +2,7 @@
 
 **The single, tool-neutral source of truth for every agent and harness in this repository** (Claude Code, Codex, Cursor, Grok CLI, and any other). All tool-specific files point here: `CLAUDE.md` imports it, `.cursor/rules/c2m-skills.mdc` points to it, and the `.codex/` / `.grok/` / `.agents/` skill folders are caches of the canonical skills.
 
-**Version:** 1.0.1 — 2026-09-24 · Changelog at the bottom of this file.
+**Version:** 1.0.2 — 2026-09-24 · Changelog at the bottom of this file.
 
 ---
 
@@ -30,7 +30,7 @@ Everything else (full plans, reviews, `docs/decisions/`, `docs/c2m-skills-archit
 
 ## 3. Skills
 
-Canonical source: `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\<name>\SKILL.md`. The repo folders (`.claude/skills`, `.codex/skills`, `.cursor/skills-cursor`, `.grok/skills`, `.agents/skills`) are **mirrors** — never edit a mirror first.
+Canonical source: `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\<name>\SKILL.md`. The repo folders (`.claude/skills`, `.codex/skills`, `.cursor/skills`, `.grok/skills`, `.agents/skills`) are **mirrors** — never edit a mirror first.
 
 | Skill | Use when |
 |---|---|
@@ -67,12 +67,13 @@ The same gauntlet runs in every harness, in the git pre-commit hook, and in CI (
 |---|---|---|
 | Claude Code | `CLAUDE.md` → `AGENTS.md` | `.claude/skills/` |
 | Codex | `AGENTS.md` | `.codex/skills/` |
-| Cursor | `.cursor/rules/c2m-skills.mdc` → `AGENTS.md` | `.cursor/skills-cursor/` |
+| Cursor | `.cursor/rules/c2m-skills.mdc` → `AGENTS.md` | `.cursor/skills/` |
 | Grok CLI | `AGENTS.md` (repo-root-down scan) | `.grok/skills/` → `.agents/skills/` |
 
 ---
 
 ## Changelog
+- **1.0.2 (2026-09-24):** Cursor's project mirror moved from `.cursor/skills-cursor/` to `.cursor/skills/`, as the canonical `sync-skills-across-agents` policy says (`skills-cursor` is a Cursor-managed folder). All five mirrors were refreshed from `skills-bts`; only `sync-skills-across-agents` changed (its skills-bts paths, plus its `agents/openai.yaml`). This closes the mirror deferral noted in 1.0.1.
 - **1.0.1 (2026-09-24):** Adopted AgentNamer: boot section below, `.cursor/rules/agent-namer.mdc`; the Claude Code hooks stay per-machine in the gitignored `.claude/settings.local.json` (they hold absolute local paths that would break another clone, and a PreToolUse hook that exits 2, as python does for a missing script, blocks the Agent tool); the registry `.agent-registry/` is gitignored. Canonical skills folder moved to `C:\Users\Roy Harden\OneDrive\PJ-OD\skills\skills-bts\<name>` (was `...\PJ-OD\skills\<name>`; the old paths remain as machine-local redirects); updated §3, the boot section, `CLAUDE.md`, `.cursor/rules/` and `docs/c2m-skills-architecture.md`. Skill mirrors unchanged: the canonical `sync-skills-across-agents` skill still names the old folder, so refresh the mirrors after it is updated.
 - **1.0.0 (2026-06-05):** Initial constitution under the repo-rooted, mechanically-enforced anti-rot architecture. See `docs/decisions/ADR-0001-anti-rot-architecture.md`.
 

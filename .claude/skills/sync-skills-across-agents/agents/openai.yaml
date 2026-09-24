@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sync Skills Across Agents"
+  short_description: "Keep skills visible to Claude, Codex, Cursor, and Grok CLI"
+  default_prompt: "Use $sync-skills-across-agents when adding or updating a skill (or editing AGENTS.md / CLAUDE.md / CURSOR.md / .grok/skills etc.) so Claude Code, Codex, Cursor, and Grok CLI (via ~/.grok/skills + .claude/skills compat + AGENTS.md scanning) all receive the same instructions and native discovery."
